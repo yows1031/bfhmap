@@ -1,0 +1,905 @@
+<!--
+  仙台市 バリアフリーホテルマップ
+  ================================
+  【APIキーの設定方法】
+  1. 下記の `YOUR_API_KEY` をご自身のGoogle Maps APIキーに置き換えてください。
+  2. Google Cloud Console (https://console.cloud.google.com/) にアクセスし、
+     「Maps JavaScript API」を有効化してください。
+  3. APIキーの取得・管理は上記コンソールの「APIとサービス > 認証情報」から行えます。
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>仙台市 バリアフリーホテルマップ</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
+                   "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ===== LAYOUT ===== */
+    #app {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ===== SIDE PANEL ===== */
+    #sidebar {
+      width: 340px;
+      min-width: 280px;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border-right: 1px solid #e2e8f0;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    #sidebar-header {
+      background: #1a56db;
+      color: #fff;
+      padding: 18px 16px 14px;
+      flex-shrink: 0;
+    }
+
+    #sidebar-header h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: 0.02em;
+    }
+
+    #sidebar-header p {
+      font-size: 0.75rem;
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+
+    /* legend */
+    #legend {
+      display: flex;
+      gap: 14px;
+      padding: 10px 16px;
+      background: #f1f5f9;
+      border-bottom: 1px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: #475569;
+    }
+
+    .legend-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      flex-shrink: 0;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .legend-dot.confirmed { background: #1a56db; }
+    .legend-dot.check    { background: #d97706; }
+
+    /* filters */
+    #filters {
+      display: flex;
+      gap: 8px;
+      padding: 10px 16px;
+      border-bottom: 1px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+
+    .filter-btn {
+      flex: 1;
+      padding: 6px 4px;
+      font-size: 0.75rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      background: #fff;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+      font-weight: 500;
+    }
+
+    .filter-btn:hover { border-color: #1a56db; color: #1a56db; }
+
+    .filter-btn.active {
+      background: #1a56db;
+      border-color: #1a56db;
+      color: #fff;
+    }
+
+    /* hotel count */
+    #hotel-count {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      padding: 6px 16px 4px;
+      flex-shrink: 0;
+    }
+
+    /* hotel list */
+    #hotel-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 10px 16px;
+    }
+
+    #hotel-list::-webkit-scrollbar { width: 5px; }
+    #hotel-list::-webkit-scrollbar-track { background: transparent; }
+    #hotel-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+
+    /* hotel card */
+    .hotel-card {
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .hotel-card:hover { border-color: #93c5fd; box-shadow: 0 2px 8px rgba(26,86,219,0.1); }
+
+    .hotel-card.active {
+      border-color: #1a56db;
+      box-shadow: 0 0 0 2px rgba(26,86,219,0.2);
+    }
+
+    .hotel-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 10px 12px 8px;
+      cursor: pointer;
+    }
+
+    .card-marker {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+      color: #fff;
+    }
+
+    .card-marker.confirmed { background: #1a56db; }
+    .card-marker.check     { background: #d97706; }
+
+    .card-info { flex: 1; min-width: 0; }
+
+    .card-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: #1e293b;
+    }
+
+    .card-room {
+      font-size: 0.72rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .card-access {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    .card-badge {
+      font-size: 0.65rem;
+      padding: 2px 7px;
+      border-radius: 99px;
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+
+    .card-badge.confirmed { background: #dbeafe; color: #1a56db; }
+    .card-badge.check     { background: #fef3c7; color: #92400e; }
+
+    /* expand toggle */
+    .card-footer {
+      padding: 0 12px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .toggle-btn {
+      font-size: 0.72rem;
+      color: #1a56db;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: inherit;
+    }
+
+    .toggle-btn::after {
+      content: "▼";
+      font-size: 0.6rem;
+      transition: transform 0.2s;
+    }
+
+    .toggle-btn.open::after { transform: rotate(180deg); }
+
+    .card-site-link {
+      font-size: 0.7rem;
+      color: #64748b;
+      text-decoration: none;
+    }
+
+    .card-site-link:hover { color: #1a56db; text-decoration: underline; }
+
+    /* bf detail */
+    .bf-detail {
+      display: none;
+      padding: 0 12px 10px 48px;
+    }
+
+    .bf-detail.open { display: block; }
+
+    .bf-detail ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .bf-detail li {
+      font-size: 0.72rem;
+      color: #475569;
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+      line-height: 1.4;
+    }
+
+    .bf-detail li::before { content: "♿"; font-size: 0.7rem; flex-shrink: 0; }
+
+    /* ===== MAP ===== */
+    #map { flex: 1; }
+
+    /* ===== INFO WINDOW ===== */
+    .iw-wrap { font-family: inherit; max-width: 300px; }
+
+    .iw-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 2px;
+      line-height: 1.35;
+    }
+
+    .iw-room {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+
+    .iw-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .iw-badge.confirmed { background: #dbeafe; color: #1a56db; }
+    .iw-badge.check     { background: #fef3c7; color: #92400e; }
+
+    .iw-warn {
+      font-size: 0.72rem;
+      color: #92400e;
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-radius: 6px;
+      padding: 6px 8px;
+      margin-bottom: 8px;
+      line-height: 1.45;
+    }
+
+    .iw-section-label {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 3px;
+    }
+
+    .iw-access {
+      font-size: 0.78rem;
+      color: #475569;
+      margin-bottom: 8px;
+    }
+
+    .iw-bf-list {
+      list-style: none;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .iw-bf-list li {
+      font-size: 0.75rem;
+      color: #475569;
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+      line-height: 1.4;
+    }
+
+    .iw-bf-list li span { flex: 1; }
+
+    .iw-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .iw-actions a {
+      font-size: 0.75rem;
+      padding: 5px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .iw-tel {
+      background: #f1f5f9;
+      color: #1e293b;
+      border: 1px solid #e2e8f0;
+    }
+
+    .iw-tel:hover { background: #e2e8f0; }
+
+    .iw-web {
+      background: #1a56db;
+      color: #fff;
+    }
+
+    .iw-web:hover { background: #1d4ed8; }
+
+    /* ===== MOBILE ===== */
+    @media (max-width: 680px) {
+      #app { flex-direction: column; }
+
+      #sidebar {
+        width: 100%;
+        height: 45dvh;
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      #map { height: 55dvh; }
+
+      #sidebar-header h1 { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===== SIDE PANEL ===== (コメントアウト中)
+  <aside id="sidebar">
+    <div id="sidebar-header">
+      <h1>仙台市 バリアフリーホテルマップ</h1>
+      <p>車椅子・障害者対応客室のあるホテル</p>
+    </div>
+
+    <div id="legend">
+      <div class="legend-item">
+        <div class="legend-dot confirmed">♿</div>
+        <span>確認済み（公式確認）</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot check">❓</div>
+        <span>要確認（店舗に問合せ）</span>
+      </div>
+    </div>
+
+    <div id="filters">
+      <button class="filter-btn active" data-filter="all">すべて表示</button>
+      <button class="filter-btn" data-filter="confirmed">✅ 確認済みのみ</button>
+      <button class="filter-btn" data-filter="check_required">❓ 要確認のみ</button>
+    </div>
+
+    <div id="hotel-count"></div>
+
+    <div id="hotel-list"></div>
+  </aside>
+  ===== SIDE PANEL END ===== -->
+
+  <!-- ===== MAP ===== -->
+  <div id="map"></div>
+
+</div>
+
+<script>
+// ================================================================
+// ホテルデータ
+// ================================================================
+const HOTELS = [
+  {
+    id: 1,
+    name: "ホテルメトロポリタン仙台",
+    lat: 38.2589621, lng: 140.8812941,
+    address: "仙台市青葉区中央1-1-1",
+    access: "仙台駅西口 徒歩1分",
+    status: "confirmed",
+    roomName: "ユニバーサルツイン",
+    barrierFree: ["洗面所入口 93cm引き戸", "車椅子対応バス・トイレ", "エアウィーヴマットレス使用"],
+    phone: "022-268-2525",
+    url: "https://sendai.metropolitan.jp/"
+  },
+  {
+    id: 2,
+    name: "ホテルメトロポリタン仙台イースト",
+    lat: 38.259648, lng: 140.88342,
+    address: "仙台市青葉区中央1-1-1",
+    access: "仙台駅直結",
+    status: "confirmed",
+    roomName: "バリアフリー対応客室",
+    barrierFree: ["仙台駅直結でアクセス最良", "ゆとりある洗面・バス・トイレ（車椅子対応）"],
+    phone: "022-302-3373",
+    url: "https://east-sendai.metropolitan.jp/"
+  },
+  {
+    id: 3,
+    name: "仙台ワシントンホテル",
+    lat: 38.2572804, lng: 140.8811576,
+    address: "仙台市青葉区中央4-10-8",
+    access: "仙台駅西口 徒歩5分",
+    status: "confirmed",
+    roomName: "ユニバーサルツインルーム",
+    barrierFree: ["バスルーム・トイレ 車椅子対応（引き戸）", "フロント直結呼出し機能付き", "最大3名宿泊可（ソファベッドあり）"],
+    phone: "022-745-2222",
+    url: "https://washington-hotels.jp/sendai/"
+  },
+  {
+    id: 4,
+    name: "ホテル京阪 仙台",
+    lat: 38.2601, lng: 140.8738,
+    address: "仙台市青葉区中央3-2-1",
+    access: "あおば通駅 徒歩2分 / 仙台駅 徒歩8分",
+    status: "confirmed",
+    roomName: "ユニバーサルルーム",
+    barrierFree: ["29㎡・2名対応", "バリアフリー設計", "ReFaシャワーヘッド・ドライヤー完備"],
+    phone: "022-393-5000",
+    url: "https://www.hotelkeihan.co.jp/sendai/"
+  },
+  {
+    id: 5,
+    name: "アパホテル仙台駅五橋",
+    lat: 38.2550871, lng: 140.8823288,
+    address: "仙台市若林区五橋3-1-1",
+    access: "仙台駅 徒歩10分",
+    status: "confirmed",
+    roomName: "バリアフリールーム",
+    barrierFree: ["バリアフリールーム設置", "車椅子貸出サービスあり", "大浴殿完備"],
+    phone: "0570-023-111",
+    url: "https://www.apahotel.com/hotel/hokkaido-tohoku/miyagi/sendaieki-itsutsubashi/"
+  },
+  {
+    id: 6,
+    name: "東横INN仙台東口1号館",
+    lat: 38.2608, lng: 140.8874,
+    address: "仙台市宮城野区榴岡1-1-30",
+    access: "仙台駅東口 徒歩7分",
+    status: "confirmed",
+    roomName: "ハートフルルーム®",
+    barrierFree: [
+      "タイプA（浴室・トイレ・洗面が1室）またはタイプB（浴室独立）",
+      "車椅子対応広々バスルーム・移乗台設置",
+      "車椅子優先駐車場・電動車椅子充電コンセントあり",
+      "通常客室と同一料金"
+    ],
+    phone: "022-298-1045",
+    url: "https://www.toyoko-inn.com/search/detail/00011/"
+  },
+  {
+    id: 7,
+    name: "東横INN仙台東口2号館",
+    lat: 38.2615, lng: 140.8882,
+    address: "仙台市宮城野区榴岡1-1-30",
+    access: "仙台駅東口 徒歩8分",
+    status: "confirmed",
+    roomName: "ハートフルルーム®",
+    barrierFree: [
+      "タイプA（浴室・トイレ・洗面が1室）またはタイプB（浴室独立）",
+      "車椅子対応広々バスルーム・移乗台設置",
+      "車椅子優先駐車場・電動車椅子充電コンセントあり",
+      "通常客室と同一料金"
+    ],
+    phone: "022-298-1045",
+    url: "https://www.toyoko-inn.com/search/detail/00014/"
+  },
+  {
+    id: 8,
+    name: "仙台ロイヤルパークホテル",
+    lat: 38.342863, lng: 140.83796,
+    address: "仙台市泉区寺岡6-2-1",
+    access: "東北道 泉ICから車で約10分 / 仙台駅から無料送迎バスあり",
+    status: "confirmed",
+    roomName: "ユニバーサルルーム",
+    barrierFree: ["フローリングで段差なし", "車椅子のまま入室できる浴室・化粧室", "37㎡・最大3名（エキストラベッド可）"],
+    phone: "022-377-1111",
+    url: "https://www.srph.co.jp/"
+  },
+  {
+    id: 9,
+    name: "東横INN仙台駅西口中央",
+    lat: 38.2612, lng: 140.8796,
+    address: "仙台市青葉区中央4-3-28",
+    access: "仙台駅西口 徒歩4分",
+    status: "check_required",
+    roomName: "ハートフルルーム®（設置有無要確認）",
+    barrierFree: [
+      "東横INNはチェーンとしてハートフルルーム®を展開",
+      "本店舗の設置有無は直接お問い合わせください"
+    ],
+    phone: "022-262-1045",
+    url: "https://www.toyoko-inn.com/search/detail/00098/"
+  },
+  {
+    id: 10,
+    name: "東横INN仙台駅西口一番町",
+    lat: 38.2590, lng: 140.8762,
+    address: "仙台市青葉区一番町4-1-4",
+    access: "仙台駅西口 徒歩6分",
+    status: "check_required",
+    roomName: "ハートフルルーム®（設置有無要確認）",
+    barrierFree: [
+      "東横INNはチェーンとしてハートフルルーム®を展開",
+      "本店舗の設置有無は直接お問い合わせください"
+    ],
+    phone: "022-223-1045",
+    url: "https://www.toyoko-inn.com/search/detail/00156/"
+  },
+  {
+    id: 11,
+    name: "ドーミーイン仙台駅前",
+    lat: 38.2610, lng: 140.8780,
+    address: "仙台市青葉区本町1-5-38",
+    access: "仙台駅西口 徒歩5分",
+    status: "check_required",
+    roomName: "ユニバーサルルーム（設置有無要確認）",
+    barrierFree: [
+      "ドーミーインはチェーンとしてユニバーサルルームを展開",
+      "本店舗の設置有無は直接お問い合わせください",
+      "天然温泉大浴場・サウナ完備"
+    ],
+    phone: "022-715-5489",
+    url: "https://dormy-hotels.com/dormyinn/hotels/sendaiekimae/"
+  },
+  {
+    id: 12,
+    name: "ドーミーイン仙台ANNEX",
+    lat: 38.2617, lng: 140.8749,
+    address: "仙台市青葉区一番町2-3-18",
+    access: "広瀬通駅 徒歩2分 / 仙台駅 徒歩6分",
+    status: "check_required",
+    roomName: "ユニバーサルルーム（設置有無要確認）",
+    barrierFree: [
+      "ドーミーインはチェーンとしてユニバーサルルームを展開",
+      "本店舗の設置有無は直接お問い合わせください",
+      "天然温泉大浴場完備"
+    ],
+    phone: "022-262-5489",
+    url: "https://dormy-hotels.com/dormyinn/hotels/sendai_ax/"
+  },
+  {
+    id: 13,
+    name: "ドーミーインEXPRESS仙台広瀬通",
+    lat: 38.2622, lng: 140.8740,
+    address: "仙台市青葉区国分町2-11-18",
+    access: "広瀬通駅 徒歩1分",
+    status: "check_required",
+    roomName: "ユニバーサルルーム（設置有無要確認）",
+    barrierFree: [
+      "ドーミーインはチェーンとしてユニバーサルルームを展開",
+      "本店舗の設置有無は直接お問い合わせください"
+    ],
+    phone: "022-222-5489",
+    url: "https://dormy-hotels.com/dormyinn/hotels/ex_sendai/"
+  },
+  {
+    id: 14,
+    name: "ドーミーインEXPRESS仙台シーサイド",
+    lat: 38.2827, lng: 140.9476,
+    address: "仙台市宮城野区港3-5-1",
+    access: "仙台港ICから車で5分（車での利用推奨）",
+    status: "check_required",
+    roomName: "ユニバーサルルーム（設置有無要確認）",
+    barrierFree: [
+      "ドーミーインはチェーンとしてユニバーサルルームを展開",
+      "本店舗の設置有無は直接お問い合わせください",
+      "最大級の大浴場・露天岩風呂完備"
+    ],
+    phone: "022-355-5489",
+    url: "https://dormy-hotels.com/dormyinn/hotels/sendai_ex/"
+  },
+  {
+    id: 15,
+    name: "スーパーホテル仙台・広瀬通り",
+    lat: 38.2621, lng: 140.8758,
+    address: "仙台市青葉区中央2-9-23",
+    access: "広瀬通駅 徒歩3分 / 仙台駅 徒歩10分",
+    status: "check_required",
+    roomName: "バリアフリールーム（設置有無要確認）",
+    barrierFree: [
+      "スーパーホテルは一部店舗でユニバーサルルームを展開",
+      "本店舗の設置有無は直接お問い合わせください"
+    ],
+    phone: "022-213-9000",
+    url: "https://www.superhotel.co.jp/s_hotels/hirose/"
+  },
+  {
+    id: 16,
+    name: "ホテルルートイン仙台東",
+    lat: 38.2537, lng: 140.9012,
+    address: "仙台市若林区六丁の目西町2-1",
+    access: "六丁の目駅 徒歩8分",
+    status: "check_required",
+    roomName: "バリアフリールーム（設置有無要確認）",
+    barrierFree: [
+      "ルートインはチェーンとしてバリアフリールームを展開",
+      "介助式車椅子の貸出あり",
+      "障害者手帳提示で割引あり",
+      "本店舗の設置有無は直接お問い合わせください"
+    ],
+    phone: "022-287-2755",
+    url: "https://www.route-inn.co.jp/hotel_list/miyagi/index_hotel_id_664/"
+  },
+  {
+    id: 17,
+    name: "ホテルルートイン仙台泉インター",
+    lat: 38.3247, lng: 140.8806,
+    address: "仙台市泉区市名坂字囲護台88-1",
+    access: "泉中央駅からバス / 泉ICから車で2分",
+    status: "check_required",
+    roomName: "バリアフリールーム（設置有無要確認）",
+    barrierFree: [
+      "ルートインはチェーンとしてバリアフリールームを展開",
+      "介助式車椅子の貸出あり",
+      "障害者手帳提示で割引あり",
+      "本店舗の設置有無は直接お問い合わせください"
+    ],
+    phone: "022-378-4511",
+    url: "https://www.route-inn.co.jp/hotel_list/miyagi/index_hotel_id_210/"
+  },
+  {
+    id: 18,
+    name: "ホテルルートイン仙台長町インター",
+    lat: 38.2165, lng: 140.8742,
+    address: "仙台市太白区長町南4-2-26",
+    access: "長町南駅 徒歩10分 / 長町ICから車で3分",
+    status: "check_required",
+    roomName: "バリアフリールーム（設置有無要確認）",
+    barrierFree: [
+      "ルートインはチェーンとしてバリアフリールームを展開",
+      "バリアフリー用トイレあり",
+      "介助式車椅子の貸出あり",
+      "障害者手帳提示で割引あり"
+    ],
+    phone: "022-248-4511",
+    url: "https://www.route-inn.co.jp/hotel_list/miyagi/index_hotel_id_291/"
+  }
+];
+
+// ================================================================
+// State
+// ================================================================
+let map;
+let markers = {};       // id -> google.maps.Marker
+let infoWindow;
+let activeCardId = null;
+let currentFilter = "all";
+
+// ================================================================
+// Map init (called by Google Maps API callback)
+// ================================================================
+function initMap() {
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 38.2596, lng: 140.8826 },
+    zoom: 16,
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: true,
+    zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER }
+  });
+
+  infoWindow = new google.maps.InfoWindow({ maxWidth: 320 });
+
+  HOTELS.forEach(hotel => {
+    const marker = new google.maps.Marker({
+      position: { lat: hotel.lat, lng: hotel.lng },
+      map,
+      title: hotel.name
+    });
+
+    marker.addListener("click", () => openInfo(hotel, marker));
+    markers[hotel.id] = marker;
+  });
+
+  // buildList(HOTELS);
+  // updateCount(HOTELS.length);
+}
+
+// ================================================================
+// Info Window
+// ================================================================
+function openInfo(hotel, marker) {
+  infoWindow.setContent(`<div style="font-size:0.9rem;font-weight:700;padding:2px 4px;">${hotel.name}</div>`);
+  infoWindow.open(map, marker);
+  // setActiveCard(hotel.id);
+}
+
+// ================================================================
+// Sidebar list
+// ================================================================
+function buildList(hotels) {
+  const list = document.getElementById("hotel-list");
+  list.innerHTML = "";
+
+  if (hotels.length === 0) {
+    list.innerHTML = `<div style="text-align:center;color:#94a3b8;padding:32px 16px;font-size:0.85rem;">
+      該当するホテルがありません
+    </div>`;
+    return;
+  }
+
+  hotels.forEach(hotel => {
+    const isConfirmed = hotel.status === "confirmed";
+    const statusClass = isConfirmed ? "confirmed" : "check";
+    const badgeLabel  = isConfirmed ? "✅ 確認済み" : "❓ 要確認";
+    const markerEmoji = isConfirmed ? "♿" : "❓";
+
+    const bfHtml = hotel.barrierFree
+      .map(b => `<li>${b}</li>`)
+      .join("");
+
+    const card = document.createElement("div");
+    card.className = "hotel-card";
+    card.dataset.id = hotel.id;
+
+    card.innerHTML = `
+      <div class="hotel-card-header">
+        <div class="card-marker ${statusClass}">${markerEmoji}</div>
+        <div class="card-info">
+          <div class="card-name">${hotel.name}</div>
+          <div class="card-room">${hotel.roomName}</div>
+          <div class="card-access">${hotel.access}</div>
+        </div>
+        <span class="card-badge ${statusClass}">${badgeLabel}</span>
+      </div>
+      <div class="card-footer">
+        <button class="toggle-btn" data-id="${hotel.id}">バリアフリー設備を見る</button>
+        <a class="card-site-link" href="${hotel.url}" target="_blank" rel="noopener">公式サイト ↗</a>
+      </div>
+      <div class="bf-detail" id="bf-${hotel.id}">
+        <ul>${bfHtml}</ul>
+      </div>
+    `;
+
+    // click header -> map
+    card.querySelector(".hotel-card-header").addEventListener("click", () => {
+      const marker = markers[hotel.id];
+      map.panTo(marker.getPosition());
+      if (map.getZoom() < 15) map.setZoom(15);
+      openInfo(hotel, marker);
+      // scroll card into view on mobile
+      card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    // toggle bf detail
+    card.querySelector(".toggle-btn").addEventListener("click", e => {
+      e.stopPropagation();
+      const detail = document.getElementById(`bf-${hotel.id}`);
+      const btn    = e.currentTarget;
+      const isOpen = detail.classList.toggle("open");
+      btn.classList.toggle("open", isOpen);
+      btn.textContent = isOpen ? "バリアフリー設備を閉じる" : "バリアフリー設備を見る";
+      if (isOpen) btn.classList.add("open"); else btn.classList.remove("open");
+    });
+
+    list.appendChild(card);
+  });
+}
+
+function setActiveCard(id) {
+  if (activeCardId) {
+    const prev = document.querySelector(`.hotel-card[data-id="${activeCardId}"]`);
+    if (prev) prev.classList.remove("active");
+  }
+  activeCardId = id;
+  const curr = document.querySelector(`.hotel-card[data-id="${id}"]`);
+  if (curr) {
+    curr.classList.add("active");
+    curr.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+}
+
+function updateCount(n) {
+  document.getElementById("hotel-count").textContent = `${n} 件表示中`;
+}
+
+// ================================================================
+// Filters
+// ================================================================
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentFilter = btn.dataset.filter;
+    applyFilter();
+  });
+});
+
+function applyFilter() {
+  const filtered = currentFilter === "all"
+    ? HOTELS
+    : HOTELS.filter(h => h.status === currentFilter);
+
+  // update markers visibility
+  HOTELS.forEach(h => {
+    const show = filtered.some(f => f.id === h.id);
+    markers[h.id] && markers[h.id].setVisible(show);
+  });
+
+  buildList(filtered);
+  updateCount(filtered.length);
+
+  // close info window if active hotel is filtered out
+  if (activeCardId && !filtered.some(h => h.id === activeCardId)) {
+    infoWindow.close();
+    activeCardId = null;
+  }
+}
+</script>
+
+<!-- Google Maps JavaScript API -->
+<!-- YOUR_API_KEY を取得済みのAPIキーに置き換えてください -->
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbJFY4DGcQ1Khqc2as1MSKn66fcrQ-AOY&callback=initMap&language=ja"
+  async defer>
+</script>
+
+</body>
+</html>
