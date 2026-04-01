@@ -456,6 +456,7 @@
 // ホテルデータ
 // ================================================================
 const HOTELS = [
+  // ===== ✅ バリアフリー・ユニバーサルルーム 確認済み =====
   {
     id: 1,
     name: "ホテルメトロポリタン仙台",
@@ -464,60 +465,164 @@ const HOTELS = [
     access: "仙台駅西口 徒歩1分",
     status: "confirmed",
     roomName: "ユニバーサルツイン",
-    barrierFree: ["洗面所入口 93cm引き戸", "車椅子対応バス・トイレ", "エアウィーヴマットレス使用"],
+    barrierFree: [
+      "洗面所入口 93cm引き戸",
+      "バス・トイレ 車椅子対応",
+      "エアウィーヴマットレス使用",
+      "7〜11階・街側のみ"
+    ],
     phone: "022-268-2525",
     url: "https://sendai.metropolitan.jp/"
   },
   {
     id: 2,
     name: "ホテルメトロポリタン仙台イースト",
-    lat: 38.259648, lng: 140.88342,
+    lat: 38.2596, lng: 140.8840,
     address: "仙台市青葉区中央1-1-1",
     access: "仙台駅直結",
     status: "confirmed",
-    roomName: "バリアフリー対応客室",
-    barrierFree: ["仙台駅直結でアクセス最良", "ゆとりある洗面・バス・トイレ（車椅子対応）"],
+    roomName: "ユニバーサルツイン",
+    barrierFree: [
+      "車椅子対応ゆとりの洗面・バス・トイレ",
+      "レインシャワー・ブローバス完備",
+      "仙台駅直結でアクセス最良"
+    ],
     phone: "022-302-3373",
     url: "https://east-sendai.metropolitan.jp/"
   },
   {
     id: 3,
+    name: "ダイワロイネットホテル仙台",
+    lat: 38.2604, lng: 140.8838,
+    address: "仙台市宮城野区榴岡1-2-37",
+    access: "仙台駅東口 徒歩2分",
+    status: "confirmed",
+    roomName: "ユニバーサルツイン",
+    barrierFree: [
+      "車椅子のまま入室できる広いバスルーム入口",
+      "各所に手すり設置",
+      "他客室とは別にバス・トイレ独立構造"
+    ],
+    phone: "022-293-7055",
+    url: "https://www.daiwaroynet.jp/sendai/"
+  },
+  {
+    id: 4,
     name: "仙台ワシントンホテル",
-    lat: 38.2572804, lng: 140.8811576,
+    lat: 38.2572, lng: 140.8812,
     address: "仙台市青葉区中央4-10-8",
     access: "仙台駅西口 徒歩5分",
     status: "confirmed",
     roomName: "ユニバーサルツインルーム",
-    barrierFree: ["バスルーム・トイレ 車椅子対応（引き戸）", "フロント直結呼出し機能付き", "最大3名宿泊可（ソファベッドあり）"],
+    barrierFree: [
+      "バスルーム・トイレ 車椅子対応（引き戸）",
+      "フロント直結 緊急呼出し機能付き",
+      "最大3名宿泊可（ソファベッドあり）",
+      "1階ロビーに多目的化粧室（オストメイト対応）"
+    ],
     phone: "022-745-2222",
     url: "https://washington-hotels.jp/sendai/"
   },
   {
-    id: 4,
-    name: "ホテル京阪 仙台",
-    lat: 38.2601, lng: 140.8738,
-    address: "仙台市青葉区中央3-2-1",
-    access: "あおば通駅 徒歩2分 / 仙台駅 徒歩8分",
+    id: 5,
+    name: "ホテルビスタ仙台",
+    lat: 38.2600, lng: 140.8845,
+    address: "仙台市宮城野区榴岡1-3-28",
+    access: "仙台駅東口 徒歩4分 / 宮城野通駅 徒歩1分",
     status: "confirmed",
     roomName: "ユニバーサルルーム",
-    barrierFree: ["29㎡・2名対応", "バリアフリー設計", "ReFaシャワーヘッド・ドライヤー完備"],
-    phone: "022-393-5000",
-    url: "https://www.hotelkeihan.co.jp/sendai/"
+    barrierFree: [
+      "ユニバーサルルーム1室（ツインベッド 110cm×2台）",
+      "車椅子での移動スペース確保",
+      "公式FAQにて設置確認済"
+    ],
+    phone: "022-385-6222",
+    url: "https://sendai.hotel-vista.jp/"
   },
   {
-    id: 5,
-    name: "アパホテル仙台駅五橋",
-    lat: 38.2550871, lng: 140.8823288,
+    id: 6,
+    name: "リッチモンドホテルプレミア仙台駅前",
+    lat: 38.2598, lng: 140.8795,
+    address: "仙台市青葉区中央2-1-1",
+    access: "仙台駅西口 徒歩3分 / あおば通駅 徒歩1分",
+    status: "confirmed",
+    roomName: "ユニバーサルルーム（スーペリアツイン）",
+    barrierFree: [
+      "スーペリアツインに1室のみユニバーサルデザイン対応",
+      "ReFaシャワーヘッド・ドライヤー完備",
+      "空き状況は電話にて要確認"
+    ],
+    phone: "022-716-2855",
+    url: "https://richmondhotel.jp/sendai-ekimae/"
+  },
+  {
+    id: 7,
+    name: "東横INN仙台駅西口中央",
+    lat: 38.2615, lng: 140.8793,
+    address: "仙台市青葉区中央4-3-28",
+    access: "仙台駅西口 徒歩4分",
+    status: "confirmed",
+    roomName: "ハートフルルーム®",
+    barrierFree: [
+      "タイプA（浴室・トイレ・洗面が1室）またはタイプB（浴室独立）",
+      "車椅子対応広々バスルーム・移乗台設置",
+      "車椅子優先駐車場・電動車椅子充電コンセントあり",
+      "通常客室と同一料金"
+    ],
+    phone: "022-726-1045",
+    url: "https://www.toyoko-inn.com/search/detail/00098/"
+  },
+  {
+    id: 8,
+    name: "アパヴィラホテル〈仙台駅五橋〉",
+    lat: 38.2551, lng: 140.8823,
     address: "仙台市若林区五橋3-1-1",
-    access: "仙台駅 徒歩10分",
+    access: "仙台駅西口 徒歩8分 / 五橋駅 徒歩2分",
     status: "confirmed",
     roomName: "バリアフリールーム",
-    barrierFree: ["バリアフリールーム設置", "車椅子貸出サービスあり", "大浴殿完備"],
+    barrierFree: [
+      "バリアフリールーム設置確認済",
+      "車椅子貸出サービスあり",
+      "バリアフリー用トイレあり",
+      "大浴殿（人工温泉）完備"
+    ],
     phone: "0570-023-111",
     url: "https://www.apahotel.com/hotel/hokkaido-tohoku/miyagi/sendaieki-itsutsubashi/"
   },
   {
-    id: 6,
+    id: 9,
+    name: "ANAホリデイ・イン仙台 by IHG",
+    lat: 38.2591, lng: 140.8850,
+    address: "仙台市若林区新寺1-4-1",
+    access: "仙台駅東口 徒歩6分 / 宮城野通駅 徒歩3分",
+    status: "confirmed",
+    roomName: "ユニバーサルルーム（ツイン）",
+    barrierFree: [
+      "ユニバーサルルーム（ツイン）設置",
+      "全室20㎡以上のゆとりある客室",
+      "ご予約はホテルへ直接お問い合わせ"
+    ],
+    phone: "022-256-5111",
+    url: "https://www.anaholidayinn-sendai.jp/"
+  },
+  {
+    id: 10,
+    name: "R&Bホテル仙台東口（ワシントン系列）",
+    lat: 38.2609, lng: 140.8854,
+    address: "仙台市宮城野区名掛丁205-5付近",
+    access: "仙台駅東口 徒歩5分",
+    status: "confirmed",
+    roomName: "バリアフリールーム",
+    barrierFree: [
+      "バリアフリールームあり（公式サイト確認）",
+      "焼きたてパンの朝食サービスあり",
+      "詳細はホテルへ直接お問い合わせ"
+    ],
+    phone: "022-292-1919",
+    url: "https://www.washingtonhotel.co.jp/rb/sendai-higashiguchi/"
+  },
+  {
+    id: 11,
     name: "東横INN仙台東口1号館",
     lat: 38.2608, lng: 140.8874,
     address: "仙台市宮城野区榴岡1-1-30",
@@ -530,15 +635,15 @@ const HOTELS = [
       "車椅子優先駐車場・電動車椅子充電コンセントあり",
       "通常客室と同一料金"
     ],
-    phone: "022-298-1045",
+    phone: "022-256-1045",
     url: "https://www.toyoko-inn.com/search/detail/00011/"
   },
   {
-    id: 7,
+    id: 12,
     name: "東横INN仙台東口2号館",
-    lat: 38.2615, lng: 140.8882,
-    address: "仙台市宮城野区榴岡1-1-30",
-    access: "仙台駅東口 徒歩8分",
+    lat: 38.2617, lng: 140.8879,
+    address: "仙台市宮城野区つつじヶ丘3-4-19",
+    access: "宮城野通駅 徒歩6分 / 仙台駅東口 徒歩10分",
     status: "confirmed",
     roomName: "ハートフルルーム®",
     barrierFree: [
@@ -551,175 +656,344 @@ const HOTELS = [
     url: "https://www.toyoko-inn.com/search/detail/00014/"
   },
   {
-    id: 8,
-    name: "仙台ロイヤルパークホテル",
-    lat: 38.342863, lng: 140.83796,
-    address: "仙台市泉区寺岡6-2-1",
-    access: "東北道 泉ICから車で約10分 / 仙台駅から無料送迎バスあり",
+    id: 13,
+    name: "ホテル京阪 仙台",
+    lat: 38.2601, lng: 140.8742,
+    address: "仙台市青葉区中央3-2-1",
+    access: "あおば通駅 徒歩2分 / 仙台駅 徒歩8分",
     status: "confirmed",
     roomName: "ユニバーサルルーム",
-    barrierFree: ["フローリングで段差なし", "車椅子のまま入室できる浴室・化粧室", "37㎡・最大3名（エキストラベッド可）"],
-    phone: "022-377-1111",
-    url: "https://www.srph.co.jp/"
-  },
-  {
-    id: 9,
-    name: "東横INN仙台駅西口中央",
-    lat: 38.2612, lng: 140.8796,
-    address: "仙台市青葉区中央4-3-28",
-    access: "仙台駅西口 徒歩4分",
-    status: "check_required",
-    roomName: "ハートフルルーム®（設置有無要確認）",
     barrierFree: [
-      "東横INNはチェーンとしてハートフルルーム®を展開",
-      "本店舗の設置有無は直接お問い合わせください"
+      "29㎡・2名対応",
+      "バリアフリー設計",
+      "ReFaシャワーヘッド・ドライヤー完備"
     ],
-    phone: "022-262-1045",
-    url: "https://www.toyoko-inn.com/search/detail/00098/"
-  },
-  {
-    id: 10,
-    name: "東横INN仙台駅西口一番町",
-    lat: 38.2590, lng: 140.8762,
-    address: "仙台市青葉区一番町4-1-4",
-    access: "仙台駅西口 徒歩6分",
-    status: "check_required",
-    roomName: "ハートフルルーム®（設置有無要確認）",
-    barrierFree: [
-      "東横INNはチェーンとしてハートフルルーム®を展開",
-      "本店舗の設置有無は直接お問い合わせください"
-    ],
-    phone: "022-223-1045",
-    url: "https://www.toyoko-inn.com/search/detail/00156/"
-  },
-  {
-    id: 11,
-    name: "ドーミーイン仙台駅前",
-    lat: 38.2610, lng: 140.8780,
-    address: "仙台市青葉区本町1-5-38",
-    access: "仙台駅西口 徒歩5分",
-    status: "check_required",
-    roomName: "ユニバーサルルーム（設置有無要確認）",
-    barrierFree: [
-      "ドーミーインはチェーンとしてユニバーサルルームを展開",
-      "本店舗の設置有無は直接お問い合わせください",
-      "天然温泉大浴場・サウナ完備"
-    ],
-    phone: "022-715-5489",
-    url: "https://dormy-hotels.com/dormyinn/hotels/sendaiekimae/"
-  },
-  {
-    id: 12,
-    name: "ドーミーイン仙台ANNEX",
-    lat: 38.2617, lng: 140.8749,
-    address: "仙台市青葉区一番町2-3-18",
-    access: "広瀬通駅 徒歩2分 / 仙台駅 徒歩6分",
-    status: "check_required",
-    roomName: "ユニバーサルルーム（設置有無要確認）",
-    barrierFree: [
-      "ドーミーインはチェーンとしてユニバーサルルームを展開",
-      "本店舗の設置有無は直接お問い合わせください",
-      "天然温泉大浴場完備"
-    ],
-    phone: "022-262-5489",
-    url: "https://dormy-hotels.com/dormyinn/hotels/sendai_ax/"
-  },
-  {
-    id: 13,
-    name: "ドーミーインEXPRESS仙台広瀬通",
-    lat: 38.2622, lng: 140.8740,
-    address: "仙台市青葉区国分町2-11-18",
-    access: "広瀬通駅 徒歩1分",
-    status: "check_required",
-    roomName: "ユニバーサルルーム（設置有無要確認）",
-    barrierFree: [
-      "ドーミーインはチェーンとしてユニバーサルルームを展開",
-      "本店舗の設置有無は直接お問い合わせください"
-    ],
-    phone: "022-222-5489",
-    url: "https://dormy-hotels.com/dormyinn/hotels/ex_sendai/"
+    phone: "022-263-0321",
+    url: "https://www.hotelkeihan.co.jp/sendai/"
   },
   {
     id: 14,
-    name: "ドーミーインEXPRESS仙台シーサイド",
-    lat: 38.2827, lng: 140.9476,
-    address: "仙台市宮城野区港3-5-1",
-    access: "仙台港ICから車で5分（車での利用推奨）",
-    status: "check_required",
-    roomName: "ユニバーサルルーム（設置有無要確認）",
+    name: "アルモントホテル仙台",
+    lat: 38.2607, lng: 140.8818,
+    address: "仙台市青葉区中央3-4-10",
+    access: "仙台駅西口 徒歩5分",
+    status: "confirmed",
+    roomName: "ユニバーサルルーム",
     barrierFree: [
-      "ドーミーインはチェーンとしてユニバーサルルームを展開",
-      "本店舗の設置有無は直接お問い合わせください",
-      "最大級の大浴場・露天岩風呂完備"
+      "約19.7㎡・車椅子対応設計",
+      "体の不自由な方・車椅子使用者向け安全設計",
+      "大浴場（準天然光明石温泉）完備"
     ],
-    phone: "022-355-5489",
-    url: "https://dormy-hotels.com/dormyinn/hotels/sendai_ex/"
+    phone: "022-212-6551",
+    url: "https://www.almont.jp/sendai/"
   },
   {
     id: 15,
-    name: "スーパーホテル仙台・広瀬通り",
-    lat: 38.2621, lng: 140.8758,
-    address: "仙台市青葉区中央2-9-23",
-    access: "広瀬通駅 徒歩3分 / 仙台駅 徒歩10分",
-    status: "check_required",
-    roomName: "バリアフリールーム（設置有無要確認）",
+    name: "コンフォートホテル仙台西口",
+    lat: 38.2585, lng: 140.8787,
+    address: "仙台市青葉区中央3-10-7",
+    access: "仙台駅西口 徒歩3分",
+    status: "confirmed",
+    roomName: "ユニバーサルルーム",
     barrierFree: [
-      "スーパーホテルは一部店舗でユニバーサルルームを展開",
-      "本店舗の設置有無は直接お問い合わせください"
+      "車椅子のまま入室できる浴室（段差なし）",
+      "低めのバスタブ・手すり設置",
+      "フロントへの緊急ボタンあり",
+      "ご予約はお電話にて受付"
     ],
-    phone: "022-213-9000",
-    url: "https://www.superhotel.co.jp/s_hotels/hirose/"
+    phone: "022-217-7112",
+    url: "https://www.choice-hotels.jp/hotel/sendai-w/"
   },
   {
     id: 16,
-    name: "ホテルルートイン仙台東",
-    lat: 38.2537, lng: 140.9012,
-    address: "仙台市若林区六丁の目西町2-1",
-    access: "六丁の目駅 徒歩8分",
-    status: "check_required",
-    roomName: "バリアフリールーム（設置有無要確認）",
+    name: "ウェスティンホテル仙台",
+    lat: 38.2629, lng: 140.8755,
+    address: "仙台市青葉区一番町4-6-1",
+    access: "仙台駅西口 徒歩9分 / 青葉通一番町駅 徒歩7分",
+    status: "confirmed",
+    roomName: "アクセシブルルーム（車椅子利用者用客室）",
     barrierFree: [
-      "ルートインはチェーンとしてバリアフリールームを展開",
-      "介助式車椅子の貸出あり",
-      "障害者手帳提示で割引あり",
-      "本店舗の設置有無は直接お問い合わせください"
+      "車椅子利用者用客室あり（Marriott公式確認）",
+      "28〜36階・全室平均43㎡のゆとりある設計",
+      "詳細はホテルへ直接お問い合わせ（+81 22-722-1234）"
     ],
-    phone: "022-287-2755",
-    url: "https://www.route-inn.co.jp/hotel_list/miyagi/index_hotel_id_664/"
+    phone: "022-722-1234",
+    url: "https://www.marriott.com/ja/hotels/sdjwi-the-westin-sendai/"
   },
   {
     id: 17,
-    name: "ホテルルートイン仙台泉インター",
-    lat: 38.3247, lng: 140.8806,
-    address: "仙台市泉区市名坂字囲護台88-1",
-    access: "泉中央駅からバス / 泉ICから車で2分",
-    status: "check_required",
-    roomName: "バリアフリールーム（設置有無要確認）",
+    name: "ホテルメルパルク仙台",
+    lat: 38.2574, lng: 140.8870,
+    address: "仙台市宮城野区榴岡5-6-51",
+    access: "仙台駅東口 徒歩10分",
+    status: "confirmed",
+    roomName: "ユニバーサルルーム",
     barrierFree: [
-      "ルートインはチェーンとしてバリアフリールームを展開",
-      "介助式車椅子の貸出あり",
-      "障害者手帳提示で割引あり",
-      "本店舗の設置有無は直接お問い合わせください"
+      "40㎡・ゆとりある設計",
+      "入口広めの造り・車椅子移動スペース確保",
+      "バスルーム段差なし・手すり設置",
+      "ソファベッドあり（トリプル利用可）",
+      "バス椅子・桶など備品完備"
     ],
-    phone: "022-378-4511",
-    url: "https://www.route-inn.co.jp/hotel_list/miyagi/index_hotel_id_210/"
+    phone: "022-792-8111",
+    url: "https://www.mielparque.jp/sendai/"
   },
   {
     id: 18,
-    name: "ホテルルートイン仙台長町インター",
-    lat: 38.2165, lng: 140.8742,
-    address: "仙台市太白区長町南4-2-26",
-    access: "長町南駅 徒歩10分 / 長町ICから車で3分",
-    status: "check_required",
-    roomName: "バリアフリールーム（設置有無要確認）",
+    name: "リッチモンドホテル仙台",
+    lat: 38.2561, lng: 140.8862,
+    address: "仙台市宮城野区榴岡2-1-22",
+    access: "仙台駅東口 徒歩8分",
+    status: "confirmed",
+    roomName: "バリアフリー対応ルーム",
     barrierFree: [
-      "ルートインはチェーンとしてバリアフリールームを展開",
-      "バリアフリー用トイレあり",
-      "介助式車椅子の貸出あり",
-      "障害者手帳提示で割引あり"
+      "段差のないフルフラット設計",
+      "車椅子・ベビーカー対応の広めの室内",
+      "キッズスペース・ファミリーラウンジ完備",
+      "禁煙のみ"
     ],
-    phone: "022-248-4511",
-    url: "https://www.route-inn.co.jp/hotel_list/miyagi/index_hotel_id_291/"
+    phone: "022-722-0055",
+    url: "https://richmondhotel.jp/sendai/"
+  },
+  {
+    id: 19,
+    name: "東横INN仙台西口広瀬通",
+    lat: 38.2628, lng: 140.8778,
+    address: "仙台市青葉区本町1-14-13",
+    access: "広瀬通駅 徒歩3分 / 仙台駅 徒歩10分",
+    status: "confirmed",
+    roomName: "ハートフルルーム®",
+    barrierFree: [
+      "タイプA（浴室・トイレ・洗面が1室）またはタイプB（浴室独立）",
+      "車椅子対応広々バスルーム・移乗台設置",
+      "車椅子優先駐車場・電動車椅子充電コンセントあり",
+      "通常客室と同一料金"
+    ],
+    phone: "022-721-1045",
+    url: "https://www.toyoko-inn.com/search/detail/00156/"
+  },
+  {
+    id: 20,
+    name: "R&Bホテル仙台広瀬通駅前（ワシントン系列）",
+    lat: 38.2626, lng: 140.8749,
+    address: "仙台市青葉区国分町2-11-26付近",
+    access: "広瀬通駅 徒歩1分 / 仙台駅 徒歩8分",
+    status: "confirmed",
+    roomName: "バリアフリールーム",
+    barrierFree: [
+      "バリアフリールームあり（公式サイト確認）",
+      "ご予約はお電話（022-726-1919）にて受付",
+      "全室スマートテレビ・動画配信サービス対応"
+    ],
+    phone: "022-726-1919",
+    url: "https://www.washingtonhotel.co.jp/rb/sendai/"
+  },
+  {
+    id: 21,
+    name: "三井ガーデンホテル仙台",
+    lat: 38.2630, lng: 140.8764,
+    address: "仙台市青葉区本町2-4-6",
+    access: "広瀬通駅西口 徒歩1分 / 仙台駅 徒歩12分",
+    status: "confirmed",
+    roomName: "ユニバーサルツイン（アクセシブルツイン）",
+    barrierFree: [
+      "大きなバスルームを完備したバリアフリー設計",
+      "2025年6月全面リニューアル済",
+      "最上階に露天風呂付き大浴場あり"
+    ],
+    phone: "022-214-1131",
+    url: "https://www.gardenhotels.co.jp/sendai/"
+  },
+  {
+    id: 22,
+    name: "ダイワロイネットホテル仙台一番町",
+    lat: 38.2626, lng: 140.8759,
+    address: "仙台市青葉区一番町4-2-2",
+    access: "広瀬通駅 徒歩1分 / 仙台駅 徒歩15分",
+    status: "confirmed",
+    roomName: "ユニバーサルツイン",
+    barrierFree: [
+      "ユニバーサルツイン設置確認済",
+      "他の客室はセミセパレートタイプ",
+      "全室21㎡以上・ReFa製品完備"
+    ],
+    phone: "022-796-7685",
+    url: "https://www.daiwaroynet.jp/sendai-ichibancho/"
+  },
+  {
+    id: 23,
+    name: "ダイワロイネットホテル仙台西口",
+    lat: 38.2585, lng: 140.8800,
+    address: "仙台市青葉区中央3-7-25",
+    access: "仙台駅西口 徒歩4分 / 地下鉄仙台駅西1番出口 徒歩1分",
+    status: "confirmed",
+    roomName: "ユニバーサルツインルーム（バリアフリー）",
+    barrierFree: [
+      "ユニバーサルツインルーム（バリアフリー）設置確認済",
+      "バリアフリートイレ（オストメイト対応）は4階に完備",
+      "全室21㎡以上・セミセパレートまたはセパレートタイプ"
+    ],
+    phone: "022-217-7255",
+    url: "https://www.daiwaroynet.jp/sendai-nishiguchi/"
+  },
+  {
+    id: 24,
+    name: "ホテルパールシティ仙台",
+    lat: 38.2604, lng: 140.8736,
+    address: "仙台市青葉区一番町2-8-9",
+    access: "青葉通一番町駅 徒歩3分 / 仙台駅 徒歩12分",
+    status: "confirmed",
+    roomName: "バリアフリールーム",
+    barrierFree: [
+      "バリアフリールームあり（阪急交通社確認）",
+      "バリアフリー用トイレ・貸出用車椅子あり",
+      "シャンプーバーサービスあり"
+    ],
+    phone: "022-262-8711",
+    url: "https://hmihotelgroup.com/pearlcity-sendai/"
+  },
+
+  // ===== 🔵 館内バリアフリー設備あり（専用室は要確認） =====
+  {
+    id: 25,
+    name: "仙台ガーデンパレス",
+    lat: 38.2610, lng: 140.8852,
+    address: "仙台市宮城野区榴岡1-2-3",
+    access: "仙台駅東口 徒歩3分 / 宮城野通駅 徒歩1分",
+    status: "facilities_only",
+    roomName: "バリアフリー設備あり（専用室は要確認）",
+    barrierFree: [
+      "館内にバリアフリー対応設備あり",
+      "価格.comバリアフリー評価 3.71",
+      "宿泊前にホテルへ直接ご確認ください"
+    ],
+    phone: "022-299-6211",
+    url: "https://www.hotelgp-sendai.com/"
+  },
+  {
+    id: 26,
+    name: "コンフォートホテル仙台東口",
+    lat: 38.2598, lng: 140.8852,
+    address: "仙台市宮城野区名掛丁205-5",
+    access: "仙台駅東口 徒歩3分",
+    status: "facilities_only",
+    roomName: "バリアフリー設備あり（専用室は要確認）",
+    barrierFree: [
+      "心のバリアフリー認定施設",
+      "コンフォートホテルチェーンとしてユニバーサルルームを展開",
+      "本店舗の設置有無はホテルへ直接お問い合わせください"
+    ],
+    phone: "022-792-8711",
+    url: "https://www.choice-hotels.jp/hotel/sendai-e/"
+  },
+  {
+    id: 27,
+    name: "アパホテル〈TKP仙台駅北〉",
+    lat: 38.2610, lng: 140.8836,
+    address: "仙台市宮城野区榴岡1-1-17",
+    access: "仙台駅中央口 徒歩5分",
+    status: "facilities_only",
+    roomName: "バリアフリー設備あり（専用室は要確認）",
+    barrierFree: [
+      "館内に車椅子利用可能なトイレあり",
+      "専用バリアフリー客室の有無はホテルへ直接お問い合わせください"
+    ],
+    phone: "022-268-0111",
+    url: "https://www.apahotel.com/hotel/hokkaido-tohoku/miyagi/tkp-sendai-ekikita/"
+  },
+  {
+    id: 28,
+    name: "ホテルグランバッハ仙台",
+    lat: 38.2581, lng: 140.8852,
+    address: "仙台市宮城野区榴岡2-1-2",
+    access: "仙台駅東口 徒歩5分",
+    status: "facilities_only",
+    roomName: "バリアフリー設備あり（専用室は要確認）",
+    barrierFree: [
+      "貸出用車椅子あり",
+      "バリアフリー専用客室の有無はホテルへ直接お問い合わせください",
+      "最上階（16F）大浴場完備"
+    ],
+    phone: "022-225-8900",
+    url: "https://www.grandbach.co.jp/sendai/"
+  },
+  {
+    id: 29,
+    name: "ホテルJALシティ仙台",
+    lat: 38.2602, lng: 140.8828,
+    address: "仙台市青葉区花京院1-2-12",
+    access: "仙台駅西口 徒歩3分",
+    status: "facilities_only",
+    roomName: "バリアフリー設備あり（専用室は要確認）",
+    barrierFree: [
+      "車椅子可・貸出用車椅子あり",
+      "バリアフリー用トイレあり",
+      "専用バリアフリー客室の有無はホテルへ直接お問い合わせください"
+    ],
+    phone: "022-711-2580",
+    url: "https://www.sendai.jalcity.co.jp/"
+  },
+  {
+    id: 30,
+    name: "ホテルモンテエルマーナ仙台",
+    lat: 38.2596, lng: 140.8807,
+    address: "仙台市青葉区中央2-10-8",
+    access: "仙台駅西口 徒歩4分",
+    status: "facilities_only",
+    roomName: "バリアフリー設備あり（専用室は要確認）",
+    barrierFree: [
+      "貸出用車椅子あり",
+      "バリアフリー専用客室の有無はホテルへ直接お問い合わせください",
+      "9階に宿泊者専用大浴場あり"
+    ],
+    phone: "022-721-7501",
+    url: "https://www.monte-hermana.jp/sendai/"
+  },
+  {
+    id: 31,
+    name: "仙台国際ホテル",
+    lat: 38.2632, lng: 140.8797,
+    address: "仙台市青葉区中央4-6-1",
+    access: "仙台駅西口 徒歩10分 / 広瀬通駅 徒歩5分",
+    status: "facilities_only",
+    roomName: "バリアフリー設備あり（専用室は要確認）",
+    barrierFree: [
+      "バリアフリー用トイレ・貸出用車椅子・点字案内あり",
+      "車椅子対応客室の有無はホテルへ直接お問い合わせください"
+    ],
+    phone: "022-268-1111",
+    url: "https://www.tobu-skh.co.jp/"
+  },
+  {
+    id: 32,
+    name: "ホテルグランテラス仙台国分町",
+    lat: 38.2646, lng: 140.8757,
+    address: "仙台市青葉区国分町2-2-2",
+    access: "広瀬通駅西5番出口 徒歩3分 / 仙台駅 徒歩15分",
+    status: "facilities_only",
+    roomName: "バリアフリー設備あり（専用室は要確認）",
+    barrierFree: [
+      "貸出用車椅子あり",
+      "専用バリアフリー客室の有無はホテルへ直接お問い合わせください",
+      "朝食バイキングが高評価"
+    ],
+    phone: "022-262-7755",
+    url: "https://breezbay-group.com/hgt-s-kokubuncho/"
+  },
+  {
+    id: 33,
+    name: "アパホテル〈仙台勾当台公園〉",
+    lat: 38.2673, lng: 140.8740,
+    address: "仙台市青葉区国分町3-4-22",
+    access: "勾当台公園駅北1出口 徒歩8分",
+    status: "facilities_only",
+    roomName: "バリアフリー設備あり（専用室は要確認）",
+    barrierFree: [
+      "バリアフリー用トイレあり（楽天トラベル確認）",
+      "専用バリアフリー客室の有無はホテルへ直接お問い合わせください"
+    ],
+    phone: "022-267-4111",
+    url: "https://www.apahotel.com/hotel/hokkaido-tohoku/miyagi/sendai-koutoudaikoen/"
   }
 ];
 
@@ -747,10 +1021,27 @@ function initMap() {
 
   infoWindow = new google.maps.InfoWindow({ maxWidth: 320 });
 
+  const PIN_COLORS = {
+    confirmed:       "#1a56db",  // 青：バリアフリールーム確認済み
+    facilities_only: "#d97706"   // オレンジ：館内設備のみ
+  };
+
   HOTELS.forEach(hotel => {
+    const color = PIN_COLORS[hotel.status] || "#6b7280";
+    const icon = {
+      path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+      fillColor: color,
+      fillOpacity: 1,
+      strokeColor: "#fff",
+      strokeWeight: 1.5,
+      scale: 1.6,
+      anchor: new google.maps.Point(12, 22)
+    };
+
     const marker = new google.maps.Marker({
       position: { lat: hotel.lat, lng: hotel.lng },
       map,
+      icon,
       title: hotel.name
     });
 
@@ -766,7 +1057,31 @@ function initMap() {
 // Info Window
 // ================================================================
 function openInfo(hotel, marker) {
-  infoWindow.setContent(`<div style="font-size:0.9rem;font-weight:700;padding:2px 4px;">${hotel.name}</div>`);
+  const isConfirmed = hotel.status === "confirmed";
+  const badgeColor  = isConfirmed ? "#1a56db" : "#d97706";
+  const badgeBg     = isConfirmed ? "#dbeafe" : "#fef3c7";
+  const badgeLabel  = isConfirmed ? "♿ バリアフリールームあり" : "🏨 館内設備あり（専用室は要確認）";
+
+  const bfItems = hotel.barrierFree
+    .map(b => `<li style="display:flex;gap:5px;align-items:flex-start;margin-bottom:3px;">
+      <span style="flex-shrink:0;">・</span><span>${b}</span>
+    </li>`)
+    .join("");
+
+  const content = `
+    <div style="font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;min-width:220px;max-width:280px;">
+      <div style="font-size:0.95rem;font-weight:700;color:#1e293b;margin-bottom:4px;line-height:1.4;">${hotel.name}</div>
+      <span style="display:inline-block;font-size:0.72rem;font-weight:600;padding:2px 8px;border-radius:99px;background:${badgeBg};color:${badgeColor};margin-bottom:8px;">${badgeLabel}</span>
+      <div style="font-size:0.72rem;color:#64748b;margin-bottom:6px;">${hotel.roomName}</div>
+      <ul style="list-style:none;margin:0 0 10px;padding:0;font-size:0.78rem;color:#475569;">${bfItems}</ul>
+      <a href="${hotel.url}" target="_blank" rel="noopener"
+         style="display:inline-block;font-size:0.75rem;padding:5px 12px;border-radius:6px;background:#1a56db;color:#fff;text-decoration:none;font-weight:600;">
+        公式サイト ↗
+      </a>
+    </div>
+  `;
+
+  infoWindow.setContent(content);
   infoWindow.open(map, marker);
   // setActiveCard(hotel.id);
 }
