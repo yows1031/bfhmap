@@ -291,19 +291,13 @@
     /* ===== MAP ===== */
     #map { flex: 1; }
 
-    #app { position: relative; }
-
     #map-legend {
-      position: absolute;
-      bottom: 28px;
-      left: 12px;
-      z-index: 5;
       background: rgba(255,255,255,0.95);
       border-radius: 10px;
       padding: 10px 14px;
+      margin: 0 0 10px 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.18);
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
-      pointer-events: none;
     }
 
     .ml-title {
@@ -1075,6 +1069,10 @@ function initMap() {
   });
 
   infoWindow = new google.maps.InfoWindow({ maxWidth: 320 });
+
+  // 凡例を Maps Controls として登録（左下）
+  const legend = document.getElementById("map-legend");
+  map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(legend);
 
   const PIN_COLORS = {
     confirmed:       "#1a56db",  // 青：バリアフリールーム確認済み
