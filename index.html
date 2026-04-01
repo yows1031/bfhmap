@@ -289,7 +289,47 @@
     .bf-detail li::before { content: "♿"; font-size: 0.7rem; flex-shrink: 0; }
 
     /* ===== MAP ===== */
-    #map { flex: 1; }
+    #map { flex: 1; position: relative; }
+
+    #map-legend {
+      position: absolute;
+      bottom: 28px;
+      left: 12px;
+      z-index: 5;
+      background: rgba(255,255,255,0.95);
+      border-radius: 10px;
+      padding: 10px 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
+      pointer-events: none;
+    }
+
+    .ml-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 7px;
+    }
+
+    .ml-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.75rem;
+      color: #475569;
+      margin-bottom: 4px;
+    }
+
+    .ml-item:last-child { margin-bottom: 0; }
+
+    .ml-pin {
+      display: inline-block;
+      width: 13px;
+      height: 18px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      flex-shrink: 0;
+    }
 
     /* ===== INFO WINDOW ===== */
     .iw-wrap { font-family: inherit; max-width: 300px; }
@@ -447,7 +487,19 @@
   ===== SIDE PANEL END ===== -->
 
   <!-- ===== MAP ===== -->
-  <div id="map"></div>
+  <div id="map">
+    <div id="map-legend">
+      <div class="ml-title">仙台市 バリアフリーホテルマップ</div>
+      <div class="ml-item">
+        <span class="ml-pin" style="background:#1a56db;"></span>
+        <span>バリアフリールームあり（確認済み）</span>
+      </div>
+      <div class="ml-item">
+        <span class="ml-pin" style="background:#d97706;"></span>
+        <span>館内設備のみ（専用室は要確認）</span>
+      </div>
+    </div>
+  </div>
 
 </div>
 
