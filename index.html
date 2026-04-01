@@ -289,7 +289,9 @@
     .bf-detail li::before { content: "♿"; font-size: 0.7rem; flex-shrink: 0; }
 
     /* ===== MAP ===== */
-    #map { flex: 1; position: relative; }
+    #map { flex: 1; }
+
+    #app { position: relative; }
 
     #map-legend {
       position: absolute;
@@ -487,17 +489,18 @@
   ===== SIDE PANEL END ===== -->
 
   <!-- ===== MAP ===== -->
-  <div id="map">
-    <div id="map-legend">
-      <div class="ml-title">仙台市 バリアフリーホテルマップ</div>
-      <div class="ml-item">
-        <span class="ml-pin" style="background:#1a56db;"></span>
-        <span>バリアフリールームあり（確認済み）</span>
-      </div>
-      <div class="ml-item">
-        <span class="ml-pin" style="background:#d97706;"></span>
-        <span>館内設備のみ（専用室は要確認）</span>
-      </div>
+  <div id="map"></div>
+
+  <!-- ===== MAP LEGEND ===== -->
+  <div id="map-legend">
+    <div class="ml-title">仙台市 バリアフリーホテルマップ</div>
+    <div class="ml-item">
+      <span class="ml-pin" style="background:#1a56db;"></span>
+      <span>バリアフリールームあり（確認済み）</span>
+    </div>
+    <div class="ml-item">
+      <span class="ml-pin" style="background:#d97706;"></span>
+      <span>館内設備のみ（専用室は要確認）</span>
     </div>
   </div>
 
